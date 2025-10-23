@@ -60,12 +60,6 @@
             margin-bottom: 40px;
         }
 
-        @media (max-width: 768px) {
-            .demo-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
         .auth-flow {
             background: var(--bg-card);
             border-radius: 20px;
@@ -222,6 +216,222 @@
             color: var(--text-muted);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* Адаптация для планшетов */
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 95%;
+            }
+            
+            .demo-container {
+                gap: 30px;
+            }
+            
+            .auth-flow, .info-panel {
+                padding: 30px;
+            }
+            
+            .header {
+                margin-bottom: 30px;
+                padding: 15px;
+            }
+        }
+
+        /* Адаптация для мобильных устройств */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .demo-container {
+                grid-template-columns: 1fr;
+                gap: 25px;
+                margin-bottom: 30px;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                margin-bottom: 25px;
+                padding: 10px;
+            }
+            
+            .logo {
+                font-size: 28px;
+            }
+            
+            .company-info {
+                text-align: center;
+            }
+            
+            .auth-flow, .info-panel {
+                padding: 25px 20px;
+                border-radius: 15px;
+            }
+            
+            .flow-title {
+                font-size: 22px;
+                margin-bottom: 25px;
+            }
+            
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            input {
+                padding: 12px 15px;
+                font-size: 16px; /* Увеличиваем для мобильных */
+            }
+            
+            .btn {
+                padding: 14px 20px;
+                font-size: 16px;
+            }
+            
+            .code-display {
+                padding: 18px;
+                font-size: 22px;
+                margin: 18px 0;
+            }
+            
+            .timer {
+                font-size: 16px;
+                margin: 18px 0;
+            }
+            
+            .status-message {
+                padding: 12px;
+                margin: 18px 0;
+                font-size: 15px;
+            }
+            
+            footer {
+                padding: 25px 15px;
+                font-size: 14px;
+            }
+        }
+
+        /* Адаптация для маленьких мобильных устройств */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                margin-bottom: 20px;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            .auth-flow, .info-panel {
+                padding: 20px 15px;
+                border-radius: 12px;
+            }
+            
+            .flow-title {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .form-group {
+                margin-bottom: 18px;
+            }
+            
+            label {
+                font-size: 15px;
+                margin-bottom: 8px;
+            }
+            
+            input {
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            .btn {
+                padding: 13px 18px;
+                font-size: 15px;
+            }
+            
+            .code-display {
+                padding: 16px;
+                font-size: 20px;
+                margin: 16px 0;
+            }
+            
+            .benefits-list li {
+                font-size: 14px;
+                margin-bottom: 12px;
+                padding-left: 22px;
+            }
+            
+            footer {
+                padding: 20px 10px;
+                font-size: 13px;
+            }
+        }
+
+        /* Адаптация для очень маленьких экранов */
+        @media (max-width: 360px) {
+            .auth-flow, .info-panel {
+                padding: 18px 12px;
+            }
+            
+            .flow-title {
+                font-size: 18px;
+            }
+            
+            input {
+                padding: 10px 12px;
+            }
+            
+            .btn {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+            
+            .code-display {
+                padding: 14px;
+                font-size: 18px;
+            }
+        }
+
+        /* Поддержка ландшафтной ориентации */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                margin-bottom: 20px;
+                padding: 10px;
+            }
+            
+            .demo-container {
+                margin-bottom: 20px;
+            }
+            
+            .auth-flow, .info-panel {
+                padding: 20px;
+            }
+        }
+
+        /* Улучшение для устройств с прикрепленной клавиатурой */
+        @media (max-height: 400px) {
+            .container {
+                padding: 5px 0;
+            }
+            
+            .auth-flow, .info-panel {
+                padding: 15px;
+            }
+            
+            .form-group {
+                margin-bottom: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -317,7 +527,7 @@
         </div>
         
         <footer>
-            <p>Демонстрация сервиса SMS-авторизации Unibell &copy; 2024</p>
+            <p>Демонстрация сервиса SMS-авторизации Unibell &copy; 2025</p>
         </footer>
     </div>
 
