@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Демо SMS-авторизации | Unibell</title>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #50ffea;
+            --secondary: #9333ea;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a2439 100%);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .logo {
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 700;
+            font-size: 32px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .auth-flow {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .flow-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--bg-dark);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(80, 255, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .code-display {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'Unbounded', sans-serif;
+        }
+
+        .timer {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-muted);
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            font-weight: 600;
+        }
+
+        .success {
+            background: rgba(80, 255, 234, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .error {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+        }
+
+        .info-panel {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .benefits-list li {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+            color: var(--text-light);
+        }
+
+        .benefits-list li:before {
+            content: "✓";
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">UNIBELL</div>
+            <div class="company-info">
+                <div style="color: var(--primary); font-weight: 600;">SMS-авторизация</div>
+                <div style="color: var(--text-muted); font-size: 14px;">Демонстрация сервиса</div>
+            </div>
+        </header>
+        
+        <div class="demo-container">
+            <div class="auth-flow">
+                <h2 class="flow-title">Тестирование авторизации</h2>
+                
+                <!-- Шаг 1: Ввод телефона -->
+                <div class="step active" id="step1">
+                    <div class="form-group">
+                        <label for="phone">Введите номер телефона</label>
+                        <input type="text" id="phone" placeholder="Например: 79123456789 или +79991234567" required>
+                    </div>
+                    <button class="btn" id="sendCodeBtn">
+                        Получить SMS-код
+                    </button>
+                </div>
+                
+                <!-- Шаг 2: Ввод кода -->
+                <div class="step" id="step2">
+                    <p style="text-align: center; margin-bottom: 20px; color: var(--text-muted);">
+                        На номер <strong id="phoneNumber" style="color: var(--primary);"></strong> 
+                        отправлен SMS с кодом
+                    </p>
+                    
+                    <div class="code-display" id="codeDisplay">------</div>
+                    
+                    <p class="timer" id="timer">
+                        Код действителен: <span id="countdown">03:00</span>
+                    </p>
+                    
+                    <div class="form-group">
+                        <label for="code">Введите код из SMS</label>
+                        <input type="text" id="code" placeholder="6 цифр" maxlength="6" required>
+                    </div>
+                    
+                    <button class="btn" id="verifyCodeBtn">
+                        Подтвердить код
+                    </button>
+                    
+                    <button class="btn btn-secondary" id="backToPhoneBtn">
+                        Назад к вводу номера
+                    </button>
+                </div>
+                
+                <!-- Шаг 3: Успех -->
+                <div class="step" id="step3">
+                    <div class="status-message success" id="successMessage">
+                        ✅ Авторизация успешна! Доступ к личному кабинету предоставлен.
+                    </div>
+                    <button class="btn" id="restartBtn">
+                        Начать заново
+                    </button>
+                </div>
+                
+                <!-- Сообщение об ошибке -->
+                <div class="status-message error" id="errorMessage">
+                    ❌ Неверный код. Попробуйте еще раз.
+                </div>
+            </div>
+            
+            <div class="info-panel">
+                <h2 style="color: var(--primary); margin-bottom: 30px; text-align: center;">Преимущества</h2>
+                
+                <ul class="benefits-list">
+                    <li>Безопасная авторизация без паролей</li>
+                    <li>Мгновенная доставка кодов</li>
+                    <li>Поддержка всех мобильных операторов</li>
+                    <li>Защита от мошенничества</li>
+                    <li>Простая интеграция с вашим сайтом</li>
+                    <li>Высокая надежность доставки</li>
+                </ul>
+                
+                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">Как работает демо:</h3>
+                    <ol style="color: var(--text-light); padding-left: 20px;">
+                        <li style="margin-bottom: 8px;">Введите любой номер телефона</li>
+                        <li style="margin-bottom: 8px;">Нажмите "Получить SMS-код"</li>
+                        <li style="margin-bottom: 8px;">Введите показанный код подтверждения</li>
+                        <li>Наслаждайтесь успешной авторизацией!</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Демонстрация сервиса SMS-авторизации Unibell &copy; 2024</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Получаем все элементы
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const phoneInput = document.getElementById('phone');
+            const codeInput = document.getElementById('code');
+            const sendCodeBtn = document.getElementById('sendCodeBtn');
+            const verifyCodeBtn = document.getElementById('verifyCodeBtn');
+            const backToPhoneBtn = document.getElementById('backToPhoneBtn');
+            const restartBtn = document.getElementById('restartBtn');
+            const phoneNumberDisplay = document.getElementById('phoneNumber');
+            const codeDisplay = document.getElementById('codeDisplay');
+            const countdownDisplay = document.getElementById('countdown');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Переменные для хранения состояния
+            let generatedCode = '';
+            let countdownInterval;
+            let timeLeft = 180; // 3 минуты
+            
+            // Функция для отправки кода
+            sendCodeBtn.addEventListener('click', function() {
+                const phone = phoneInput.value.trim();
+                
+                // Простая проверка - любой номер длиной от 5 символов
+                if (!phone || phone.length < 5) {
+                    alert('Пожалуйста, введите номер телефона (минимум 5 символов)');
+                    return;
+                }
+                
+                // Генерируем случайный 6-значный код
+                generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+                
+                // Показываем код пользователю (в реальной системе он придет по SMS)
+                codeDisplay.textContent = generatedCode;
+                phoneNumberDisplay.textContent = phone;
+                
+                // Переходим к шагу 2
+                step1.classList.remove('active');
+                step2.classList.add('active');
+                errorMessage.style.display = 'none';
+                
+                // Запускаем таймер
+                startCountdown();
+            });
+            
+            // Функция проверки кода
+            verifyCodeBtn.addEventListener('click', function() {
+                const enteredCode = codeInput.value.trim();
+                
+                if (enteredCode === generatedCode) {
+                    // Успешная авторизация
+                    step2.classList.remove('active');
+                    step3.classList.add('active');
+                    successMessage.style.display = 'block';
+                    clearInterval(countdownInterval);
+                } else {
+                    // Неверный код
+                    errorMessage.style.display = 'block';
+                    codeInput.value = '';
+                    codeInput.focus();
+                }
+            });
+            
+            // Возврат к вводу номера
+            backToPhoneBtn.addEventListener('click', function() {
+                step2.classList.remove('active');
+                step1.classList.add('active');
+                clearInterval(countdownInterval);
+            });
+            
+            // Перезапуск демо
+            restartBtn.addEventListener('click', function() {
+                step3.classList.remove('active');
+                step1.classList.add('active');
+                phoneInput.value = '';
+                codeInput.value = '';
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                timeLeft = 180;
+                countdownDisplay.textContent = '03:00';
+                codeDisplay.textContent = '------';
+            });
+            
+            // Таймер обратного отсчета
+            function startCountdown() {
+                clearInterval(countdownInterval);
+                timeLeft = 180;
+                
+                countdownInterval = setInterval(function() {
+                    timeLeft--;
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(countdownInterval);
+                        countdownDisplay.textContent = '00:00';
+                        errorMessage.textContent = 'Время действия кода истекло. Запросите новый код.';
+                        errorMessage.style.display = 'block';
+                    } else {
+                        const minutes = Math.floor(timeLeft / 60);
+                        const seconds = timeLeft % 60;
+                        countdownDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    }
+                }, 1000);
+            }
+            
+            // Автоподтверждение при вводе 6 цифр
+            codeInput.addEventListener('input', function() {
+                // Оставляем только цифры
+                this.value = this.value.replace(/\D/g, '');
+                
+                if (this.value.length === 6) {
+                    verifyCodeBtn.click();
+                }
+            });
+            
+            // Фокус на поле ввода при загрузке
+            phoneInput.focus();
+        });
+    </script>
+</body>
+</html>
